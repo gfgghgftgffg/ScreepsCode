@@ -1,3 +1,5 @@
+var roleBuilder = require("role.builder");
+
 module.exports = {
     run: function(creep) {
         if(creep.store.energy == creep.store.getCapacity())
@@ -11,12 +13,19 @@ module.exports = {
                 creep.moveTo(source);
         }
         else {
-            let sourceTaker = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter:(st) => (st.structureType == STRUCTURE_SPAWN || st.structureType == STRUCTURE_EXTENSION) && st.store.getFreeCapacity(RESOURCE_ENERGY)
+            let brokenSiteInRoom = creep.pos.findClosestByPath(FIND_STRUCTURES,{
+                filter : (bs) => (bs.hits < bs.hitsMax && bs.structureType != STRUCTURE_WALL)
             });
-            if(creep.transfer(sourceTaker, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sourceTaker);
+            
+            if(brokenSiteInRoom == undefined) {
+                roleBuilder.run(creep);
             }
+            else {
+                if(creep.repair(brokenSiteInRoom) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(brokenSiteInRoom);
+                }
+            }
+            
                 
         }
 
