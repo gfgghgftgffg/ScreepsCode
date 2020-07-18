@@ -1,3 +1,5 @@
+var roleUpgrader = require("role.upgrader");
+
 module.exports = {
     run: function(creep) {
         if(creep.store.energy == creep.store.getCapacity())
@@ -11,10 +13,17 @@ module.exports = {
                 creep.moveTo(source);
         }
         else {
-            let spawnInRoom = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
-            if(creep.transfer(spawnInRoom, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(spawnInRoom);
+            let constructionSiteInRoom = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+            
+            if(constructionSiteInRoom == undefined) {
+                roleUpgrader.run(creep);
             }
+            else {
+                if(creep.build(constructionSiteInRoom) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(constructionSiteInRoom);
+                }
+            }
+            
                 
         }
 
