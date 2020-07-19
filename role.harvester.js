@@ -12,7 +12,7 @@ module.exports = {
         }
         else {
             let sourceTaker = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter:(st) => (st.structureType == STRUCTURE_SPAWN || st.structureType == STRUCTURE_EXTENSION) && st.store.getFreeCapacity(RESOURCE_ENERGY)
+                filter:(st) => st.structureType == STRUCTURE_SPAWN || (st.structureType == STRUCTURE_EXTENSION && st.store.getFreeCapacity(RESOURCE_ENERGY))
             });
             if(creep.transfer(sourceTaker, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sourceTaker);
